@@ -6,7 +6,7 @@
 //  Copyright © 2016 Daniel de Jesus Oliveira. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 /**
  Represents a messenger that sends and receives messages from the client-side.

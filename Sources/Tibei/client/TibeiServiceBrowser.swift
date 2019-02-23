@@ -6,7 +6,7 @@
 //  Copyright © 2016 Daniel de Jesus Oliveira. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 class TibeiServiceBrowser: NSObject {
     let serviceBrowser: NetServiceBrowser = NetServiceBrowser()

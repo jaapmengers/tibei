@@ -6,12 +6,21 @@
 //  Copyright © 2016 Daniel de Jesus Oliveira. All rights reserved.
 //
 
-import UIKit
 import Foundation
+#if os(iOS) || os(watchOS) || os(tvOS)
+import UIKit
+#endif
+
 
 class TibeiServer: NSObject, NetServiceDelegate {
+    #if os(iOS) || os(watchOS) || os(tvOS)
     let deviceName: String = UIDevice.current.name
-    
+    #elseif os(OSX)
+    let deviceName: String = Host.current().name ?? "<unknown>"
+    #else
+    let deviceName: String = "<unknown>"
+    #endif
+  
     let service: NetService
     
     let messenger: ServerMessenger

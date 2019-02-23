@@ -6,7 +6,7 @@
 //  Copyright © 2016 Daniel de Jesus Oliveira. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 /**
  Represents a single connection between server and client. The same class is used on either side.
