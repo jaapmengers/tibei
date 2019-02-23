@@ -34,7 +34,7 @@ class ConnectViewController: UIViewController {
             let message = TextMessage(sender: sender, content: trimmedMessage)
             
             do {
-              try self.client.sendMessage(Message(value: Messages.textMessage(message)) )
+              try self.client.sendMessage(Messages.textMessage(message) )
             } catch {
                 print("Error trying to send message:")
                 print(error)
@@ -48,7 +48,7 @@ class ConnectViewController: UIViewController {
         let message = PingMessage(sender: sender)
         
         do {
-            try self.client.sendMessage(Message(value: Messages.pingMessage(message)))
+            try self.client.sendMessage(Messages.pingMessage(message))
         } catch {
             print("Error trying to send message:")
             print(error)
@@ -58,8 +58,8 @@ class ConnectViewController: UIViewController {
  
  extension ConnectViewController: ClientConnectionResponder {
   
-    func messageParser(_ message: Data) throws -> AnyMessage {
-      return try JSONDecoder().decode(Message<Messages>.self, from: message)
+    func messageParser(_ message: Data) throws -> Message {
+      return try JSONDecoder().decode(Messages.self, from: message)
     }
   
     func availableServicesChanged(availableServiceIDs: [String]) {

@@ -62,7 +62,7 @@ public class Connection: NSObject, StreamDelegate {
         stream.close()
     }
     
-    func sendMessage<T: AnyMessage>(_ message: T) {
+    func sendMessage<T: Message>(_ message: T) {
         self.outwardMessagesQueue.addOperation {
             do {
                 _ = try self.output.writeMessage(message)
@@ -93,8 +93,8 @@ public class Connection: NSObject, StreamDelegate {
         
         do {
             if
-              let systemMessage = try? JSONDecoder().decode(Message<SystemMessages>.self, from: payloadData),
-              case .keepAliveMessage = systemMessage.value {
+              let systemMessage = try? JSONDecoder().decode(SystemMessages.self, from: payloadData),
+              case .keepAliveMessage = systemMessage {
                 return .keepAliveMessage
               }
           
@@ -112,7 +112,7 @@ public class Connection: NSObject, StreamDelegate {
         do {
             self.outwardMessagesQueue.addOperation {
                 do {
-                    try self.output.writeMessage(Message(value: SystemMessages.keepAliveMessage))
+                    try self.output.writeMessage(SystemMessages.keepAliveMessage)
                 } catch {
                     self.delegate?.connection(self, raisedError: error)
                 }

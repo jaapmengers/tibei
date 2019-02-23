@@ -12,7 +12,7 @@ extension OutputStream {
     typealias Length = UInt32
     
     @discardableResult
-    func writeMessage<T: AnyMessage>(_ message: T) throws -> Int {
+    func writeMessage<T: Message>(_ message: T) throws -> Int {
         guard self.hasSpaceAvailable else {
             throw ConnectionError.outputStreamUnavailable
         }

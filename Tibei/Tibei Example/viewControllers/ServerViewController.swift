@@ -43,9 +43,9 @@ extension ServerViewController: ConnectionResponder {
   
     func processMessage(_ data: Data, fromConnectionWithID connectionID: ConnectionID) {
       
-        guard let message = try? JSONDecoder().decode(Message<Messages>.self, from: data) else { return }
+        guard let message = try? JSONDecoder().decode(Messages.self, from: data) else { return }
       
-        switch message.value {
+        switch message {
         case .textMessage(let textMessage):
             let labelContent = NSMutableAttributedString(string: "\(textMessage.sender): \(textMessage.content)")
             

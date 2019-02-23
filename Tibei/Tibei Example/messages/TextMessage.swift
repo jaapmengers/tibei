@@ -9,7 +9,7 @@
 import Foundation
 import Tibei
 
-enum Messages: MessageContent {
+enum Messages: Message {
   case textMessage(TextMessage)
   case pingMessage(PingMessage)
   
@@ -30,11 +30,14 @@ enum Messages: MessageContent {
   }
   
   func encode(to encoder: Encoder) throws {
-    var container = encoder.singleValueContainer()
+    var container = encoder.container(keyedBy: CodingKeys.self)
+    try? container.encode(self.type, forKey: CodingKeys.type)
     
     switch self {
-    case .pingMessage(let pingMessage): try container.encode(pingMessage)
-    case .textMessage(let textMessage): try container.encode(textMessage)
+    case .pingMessage(let pingMessage):
+      try container.encode(pingMessage, forKey: .value)
+    case .textMessage(let textMessage):
+      try container.encode(textMessage, forKey: .value)
     }
     
   }

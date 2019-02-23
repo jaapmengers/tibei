@@ -91,7 +91,7 @@ public class ClientMessenger: Messenger {
     ///
     /// - Parameter message: Message to send.
     /// - Throws: `ConnectionError.notConnected` if there is no connection to send the message to.
-    public func sendMessage<T: AnyMessage>(_ message: T) throws {
+    public func sendMessage<T: Message>(_ message: T) throws {
         guard self.isReady else {
             throw ConnectionError.notConnected
         }

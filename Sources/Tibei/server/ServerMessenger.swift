@@ -58,7 +58,7 @@ public class ServerMessenger: Messenger {
         - message: The message to be sent
         - connectionID: The identifier of the connection through which the message should be sent
      */
-    public func sendMessage<T: AnyMessage>(_ message: T, toConnectionWithID connectionID: ConnectionID) {
+    public func sendMessage<T: Message>(_ message: T, toConnectionWithID connectionID: ConnectionID) {
         guard let connection = self.connections[connectionID] else {
             return
         }
@@ -71,7 +71,7 @@ public class ServerMessenger: Messenger {
      
      - Parameter message: The message to be sent
      */
-    public func broadcastMessage<T: AnyMessage>(_ message: T){
+    public func broadcastMessage<T: Message>(_ message: T){
         for (_, connection) in self.connections{
             connection.sendMessage(message)
         }
