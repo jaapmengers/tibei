@@ -31,22 +31,16 @@ enum Messages: Message {
   
   func encode(to encoder: Encoder) throws {
     var container = encoder.container(keyedBy: CodingKeys.self)
-    try? container.encode(self.type, forKey: CodingKeys.type)
     
     switch self {
     case .pingMessage(let pingMessage):
+      try container.encode("pingMessage", forKey: CodingKeys.type)
       try container.encode(pingMessage, forKey: .value)
     case .textMessage(let textMessage):
+      try container.encode("textMessage", forKey: CodingKeys.type)
       try container.encode(textMessage, forKey: .value)
     }
     
-  }
-  
-  var type: String {
-    switch self {
-    case .pingMessage: return "pingMessage"
-    case .textMessage: return "textMessage"
-    }
   }
 }
 

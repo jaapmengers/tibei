@@ -11,12 +11,6 @@ import Foundation
 enum SystemMessages: Message {
   case keepAliveMessage
   
-  var type: String {
-    switch self {
-    case .keepAliveMessage: return "keepAliveMessage"
-    }
-  }
-  
   enum CodingKeys: String, CodingKey {
     case type
   }

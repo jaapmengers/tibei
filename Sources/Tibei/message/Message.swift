@@ -7,6 +7,4 @@
 
 import Foundation
 
-public protocol Message: Codable {
-  var type: String { get }
-}
+public typealias Message = Codable
