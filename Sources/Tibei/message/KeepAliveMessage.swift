@@ -8,22 +8,32 @@
 
 import Foundation
 
-struct KeepAliveMessage: JSONConvertibleMessage {
-    public static func fromJSONObject(_ jsonObject: [String : Any]) -> KeepAliveMessage? {
-        return KeepAliveMessage(jsonObject: jsonObject)
+enum SystemMessages: Codable, MessageContent {
+  case keepAliveMessage
+  
+  var type: String {
+    switch self {
+    case .keepAliveMessage: return "keepAliveMessage"
     }
+  }
+  
+  enum CodingKeys: String, CodingKey {
+    case type
+    case value
+  }
+  
+  init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    let type = try container.decode(String.self, forKey: CodingKeys.type)
     
-    var hasMoreData: Bool = false
-    
-    init() { }
-    
-    init(jsonObject: [String : Any]) {
-        if jsonObject.count > 1 {
-            self.hasMoreData = true
-        }
+    switch type {
+    case "keepAliveMessage": self = .keepAliveMessage
+    default: throw DecodingError.dataCorruptedError(forKey: CodingKeys.type, in: container, debugDescription: "Found unsupported type \(type)")
     }
-    
-    func toJSONObject() -> [String : Any] {
-        return [:]
-    }
+  }
+  
+  func encode(to encoder: Encoder) throws {
+    var container = encoder.singleValueContainer()
+    try container.encode("keepAliveMessage")
+  }
 }

@@ -12,16 +12,14 @@ extension OutputStream {
     typealias Length = UInt32
     
     @discardableResult
-    func writeMessage<Message: JSONConvertibleMessage>(_ message: Message) throws -> Int {
+    func writeMessage<T: AnyMessage>(_ message: T) throws -> Int {
         guard self.hasSpaceAvailable else {
             throw ConnectionError.outputStreamUnavailable
         }
 
         do {
-            var messageJSONPayload: [String: Any] = message.toJSONObject()
-            messageJSONPayload[Fields.messageTypeField] = Message.type
-            
-            let data = try JSONSerialization.data(withJSONObject: messageJSONPayload)
+            let data = try JSONEncoder().encode(message)
+          
             var payloadLength: Length = Length(data.count)
             
             var dataWithLength = withUnsafePointer(to: &payloadLength) {

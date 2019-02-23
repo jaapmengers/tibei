@@ -6,15 +6,13 @@
 //
 //
 
+import Foundation
+
 /**
  Represents an entity that responds to received messages. It can explicitly state which types of messages it expects, and will only be prompted to process a message if appropriated.
  */
 public protocol ConnectionResponder: class {
-    /**
-     An array of types representing the messages it wants to receive.
-     */
-    var allowedMessages: [JSONConvertibleMessage.Type] { get }
-    
+  
     /**
      Processes a message that was received through an active connection.
      
@@ -22,7 +20,7 @@ public protocol ConnectionResponder: class {
         - message: The message received through the connection
         - connectionID: The identifier of the connection that received the message
      */
-    func processMessage(_ message: JSONConvertibleMessage, fromConnectionWithID connectionID: ConnectionID)
+    func processMessage(_ data: Data, fromConnectionWithID connectionID: ConnectionID)
     /**
      Notifies the responder that a connection has been accepted
      
@@ -46,26 +44,19 @@ public protocol ConnectionResponder: class {
 }
 
 public extension ConnectionResponder {
-    /**
-     An empty array. Note that this will cause the responder not to receive any messages. You have to explicitly state the messages that your responder will handle.
-     */
-    var allowedMessages: [JSONConvertibleMessage.Type] {
-        return []
-    }
-    
-    /// :nodoc:
-    func processMessage(_ message: JSONConvertibleMessage, fromConnectionWithID connectionID: ConnectionID) {
-    }
-    
-    /// :nodoc:
-    func acceptedConnection(withID connectionID: ConnectionID) {
-    }
-    
-    /// :nodoc:
-    func lostConnection(withID connectionID: ConnectionID) {
-    }
-    
-    /// :nodoc:
-    func processError(_ error: Error, fromConnectionWithID connectionID: ConnectionID?) {
-    }
+  /// :nodoc:
+  func processMessage(_ data: Data, fromConnectionWithID connectionID: ConnectionID) {
+  }
+  
+  /// :nodoc:
+  func acceptedConnection(withID connectionID: ConnectionID) {
+  }
+  
+  /// :nodoc:
+  func lostConnection(withID connectionID: ConnectionID) {
+  }
+  
+  /// :nodoc:
+  func processError(_ error: Error, fromConnectionWithID connectionID: ConnectionID?) {
+  }
 }

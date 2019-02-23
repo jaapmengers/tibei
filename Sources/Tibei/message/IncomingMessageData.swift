@@ -11,5 +11,5 @@ import Foundation
 enum IncomingData {
     case nilMessage
     case keepAliveMessage
-    case data([String:Any])
+    case data(Data)
 }

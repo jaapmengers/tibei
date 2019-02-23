@@ -38,19 +38,8 @@ class ResponderChainNode {
         }
     }
     
-    func processMessage(_ jsonObject: [String: Any], fromConnectionWithID connectionID: ConnectionID) throws {
-        guard let messageType = jsonObject[Fields.messageTypeField] as? String else {
-            throw ConnectionError.invalidMessageType(jsonObject)
-        }
-        
-        for allowedMessageType in self.responder.allowedMessages {
-            if allowedMessageType.type == messageType {
-                let messageObject = allowedMessageType.init(jsonObject: jsonObject)
-                
-                self.responder.processMessage(messageObject, fromConnectionWithID: connectionID)
-                break
-            }
-        }
+    func processMessage(_ jsonObject: Data, fromConnectionWithID connectionID: ConnectionID) throws {
+      self.responder.processMessage(jsonObject, fromConnectionWithID: connectionID)
     }
     
     func processError(_ error: Error, fromConnectionWithID connectionID: ConnectionID?) {

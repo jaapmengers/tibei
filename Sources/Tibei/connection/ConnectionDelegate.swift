@@ -10,7 +10,7 @@ import Foundation
 
 protocol ConnectionDelegate {
     func connection(_ connection: Connection, hasEndedWithErrors: Bool)
-    func connection(_ connection: Connection, receivedData data: [String: Any])
+    func connection(_ connection: Connection, receivedData data: Data)
     func connection(_ connection: Connection, raisedError error: Error)
     func connectionOpened(_ connection: Connection)
 }

@@ -9,6 +9,6 @@
 import Foundation
 
 struct IncomingMessageEvent: ConnectionEvent {
-    let message: [String: Any]
+    let message: Data
     let connectionID: ConnectionID
 }

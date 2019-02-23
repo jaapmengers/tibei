@@ -48,14 +48,12 @@ class SecondServerViewController: UIViewController {
 }
 
 extension SecondServerViewController: ConnectionResponder {
-    var allowedMessages: [JSONConvertibleMessage.Type] {
-        return [TextMessage.self, PingMessage.self]
-    }
-    
-    func processMessage(_ message: JSONConvertibleMessage, fromConnectionWithID connectionID: ConnectionID) {
+  func processMessage(_ data: Data, fromConnectionWithID connectionID: ConnectionID) {
+        guard let message = try? JSONDecoder().decode(Message<Messages>.self, from: data) else { return }
+      
+        switch message.value {
         
-        switch message {
-        case let textMessage as TextMessage:
+        case .textMessage(let textMessage):
             let labelContent = NSMutableAttributedString(string: "\(textMessage.sender): \(textMessage.content)")
             
             labelContent.addAttribute(NSAttributedString.Key.underlineStyle, value: NSUnderlineStyle.double.rawValue, range: NSMakeRange(0, textMessage.sender.characters.count + 1))
@@ -64,7 +62,7 @@ extension SecondServerViewController: ConnectionResponder {
                 self.incomingMessageLabel.attributedText = labelContent
             }
             
-        case let pingMessage as PingMessage:
+        case .pingMessage(let pingMessage):
             let labelContent = NSMutableAttributedString(string: "PING FROM \(pingMessage.sender)!!")
             
             DispatchQueue.main.async {

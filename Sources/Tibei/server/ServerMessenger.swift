@@ -58,7 +58,7 @@ public class ServerMessenger: Messenger {
         - message: The message to be sent
         - connectionID: The identifier of the connection through which the message should be sent
      */
-    public func sendMessage<Message: JSONConvertibleMessage>(_ message: Message, toConnectionWithID connectionID: ConnectionID) {
+    public func sendMessage<T: AnyMessage>(_ message: T, toConnectionWithID connectionID: ConnectionID) {
         guard let connection = self.connections[connectionID] else {
             return
         }
@@ -71,7 +71,7 @@ public class ServerMessenger: Messenger {
      
      - Parameter message: The message to be sent
      */
-    public func broadcastMessage<Message: JSONConvertibleMessage>(_ message: Message){
+    public func broadcastMessage<T: AnyMessage>(_ message: T){
         for (_, connection) in self.connections{
             connection.sendMessage(message)
         }
@@ -86,7 +86,7 @@ extension ServerMessenger: ConnectionDelegate {
         self.forwardEventToResponderChain(event: event, fromConnectionWithID: connection.identifier)
     }
     
-    func connection(_ connection: Connection, receivedData data: [String: Any]) {
+    func connection(_ connection: Connection, receivedData data: Data) {
         let event = IncomingMessageEvent(message: data, connectionID: connection.identifier)
         
         self.forwardEventToResponderChain(event: event, fromConnectionWithID: connection.identifier)

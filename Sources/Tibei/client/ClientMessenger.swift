@@ -91,7 +91,7 @@ public class ClientMessenger: Messenger {
     ///
     /// - Parameter message: Message to send.
     /// - Throws: `ConnectionError.notConnected` if there is no connection to send the message to.
-    public func sendMessage<Message: JSONConvertibleMessage>(_ message: Message) throws {
+    public func sendMessage<T: AnyMessage>(_ message: T) throws {
         guard self.isReady else {
             throw ConnectionError.notConnected
         }
@@ -159,7 +159,7 @@ extension ClientMessenger: ConnectionDelegate {
         self.forwardEventToResponderChain(event: event, fromConnectionWithID: connection.identifier)
     }
     
-    func connection(_ connection: Connection, receivedData data: [String: Any]) {
+    func connection(_ connection: Connection, receivedData data: Data) {
         let event = IncomingMessageEvent(message: data, connectionID: connection.identifier)
         
         self.forwardEventToResponderChain(event: event, fromConnectionWithID: connection.identifier)

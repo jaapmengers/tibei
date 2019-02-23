@@ -62,7 +62,7 @@ public class Connection: NSObject, StreamDelegate {
         stream.close()
     }
     
-    func sendMessage<Message: JSONConvertibleMessage>(_ message: Message) {
+    func sendMessage<T: AnyMessage>(_ message: T) {
         self.outwardMessagesQueue.addOperation {
             do {
                 _ = try self.output.writeMessage(message)
@@ -92,25 +92,14 @@ public class Connection: NSObject, StreamDelegate {
         let payloadData = Data(bytes: actualDataBuffer)
         
         do {
-            let payload = try JSONSerialization.jsonObject(with: payloadData, options: []) as! [String:Any]
-            
-            if let messageType = payload[Fields.messageTypeField] as? String, messageType == KeepAliveMessage.type {
-                let keepAliveMessage = self.keepAliveMessage(jsonObject: payload)
-                
-                if !keepAliveMessage.hasMoreData {
-                    return .keepAliveMessage
-                }
-            }
-            
-            print("Received payload:")
-            print(payload)
-            
-            return .data(payload)
+            if
+              let systemMessage = try? JSONDecoder().decode(Message<SystemMessages>.self, from: payloadData),
+              case .keepAliveMessage = systemMessage.value {
+                return .keepAliveMessage
+              }
+          
+            return .data(payloadData)
         }
-    }
-    
-    func keepAliveMessage(jsonObject: [String: Any]) -> KeepAliveMessage {
-        return KeepAliveMessage(jsonObject: jsonObject)
     }
     
     // MARK: - keeping connection alive
@@ -123,7 +112,7 @@ public class Connection: NSObject, StreamDelegate {
         do {
             self.outwardMessagesQueue.addOperation {
                 do {
-                    try self.output.writeMessage(KeepAliveMessage())
+                    try self.output.writeMessage(Message(value: SystemMessages.keepAliveMessage))
                 } catch {
                     self.delegate?.connection(self, raisedError: error)
                 }
@@ -160,8 +149,8 @@ public class Connection: NSObject, StreamDelegate {
             do {
                 let incomingData: IncomingData = try self.dataFromInput(self.input)
                 
-                if case .data(let payload) = incomingData {
-                    self.delegate?.connection(self, receivedData: payload)
+                if case .data(let data) = incomingData {
+                    self.delegate?.connection(self, receivedData: data)
                 }
             } catch {
                 self.stopKeepAliveRoutine()
