@@ -71,6 +71,16 @@ public class Connection: NSObject, StreamDelegate {
             }
         }
     }
+  
+    func sendData(_ data: Data) {
+      self.outwardMessagesQueue.addOperation {
+        do {
+          _ = try self.output.writeData(data)
+        } catch {
+          self.delegate?.connection(self, raisedError: error)
+        }
+      }
+    }
     
     func dataFromInput(_ stream: InputStream) throws -> IncomingData {
         var lengthInBytes = Array<UInt8>(repeating: 0, count: MemoryLayout<Constants.MessageLength>.size)

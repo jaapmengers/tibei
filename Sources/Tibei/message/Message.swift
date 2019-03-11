@@ -7,4 +7,4 @@
 
 import Foundation
 
-public typealias Message = Codable
+public typealias Message = Encodable

@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum SystemMessages: Message {
+enum SystemMessages: Decodable, Message {
   case keepAliveMessage
   
   enum CodingKeys: String, CodingKey {

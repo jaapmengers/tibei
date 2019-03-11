@@ -72,7 +72,7 @@ public class ServerMessenger: Messenger {
      - Parameter message: The message to be sent
      */
     public func broadcastMessage<T: Message>(_ message: T){
-        for (_, connection) in self.connections{
+      for (_, connection) in self.connections {
             connection.sendMessage(message)
         }
     }
@@ -82,7 +82,8 @@ public class ServerMessenger: Messenger {
 extension ServerMessenger: ConnectionDelegate {
     func connection(_ connection: Connection, hasEndedWithErrors: Bool) {
         let event = ConnectionLostEvent(connectionID: connection.identifier)
-        
+      
+        self.connections.removeValue(forKey: connection.identifier)
         self.forwardEventToResponderChain(event: event, fromConnectionWithID: connection.identifier)
     }
     
@@ -93,6 +94,7 @@ extension ServerMessenger: ConnectionDelegate {
     }
     
     func connection(_ connection: Connection, raisedError: Error) {
+        self.connections.removeValue(forKey: connection.identifier)
         self.responders.processError(raisedError, fromConnectionWithID: connection.identifier)
     }
     

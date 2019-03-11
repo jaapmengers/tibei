@@ -98,7 +98,19 @@ public class ClientMessenger: Messenger {
         
         self.connection?.sendMessage(message)
     }
-    
+  
+    /// Sends data to the currently active connection.
+    ///
+    /// - Parameter data: Data to send.
+    /// - Throws: `ConnectionError.notConnected` if there is no connection to send the message to.
+    public func sendData(_ data: Data) throws {
+        guard self.isReady else {
+          throw ConnectionError.notConnected
+        }
+
+        self.connection?.sendData(data)
+    }
+  
     /// Registers a new responder to this messenger's responder chain.
     ///
     /// - Parameter responder: Responder to register in the chain.

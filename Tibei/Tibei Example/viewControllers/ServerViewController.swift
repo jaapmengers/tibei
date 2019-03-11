@@ -67,7 +67,9 @@ extension ServerViewController: ConnectionResponder {
     func acceptedConnection(withID connectionID: ConnectionID) {
         let rawContent: String = "New connection with id #\(connectionID.hashValue)"
         let labelContent = NSMutableAttributedString(string: rawContent)
-        
+      
+        server?.broadcastMessage(Messages.pingMessage(PingMessage(sender: UIDevice.current.name)))
+      
         labelContent.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.purple, range: NSMakeRange(0, rawContent.characters.count))
         
         DispatchQueue.main.async {

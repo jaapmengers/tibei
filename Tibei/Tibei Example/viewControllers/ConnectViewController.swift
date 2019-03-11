@@ -58,8 +58,9 @@ class ConnectViewController: UIViewController {
  
  extension ConnectViewController: ClientConnectionResponder {
   
-    func messageParser(_ message: Data) throws -> Message {
-      return try JSONDecoder().decode(Messages.self, from: message)
+    func processMessage(_ data: Data, fromConnectionWithID connectionID: ConnectionID) {
+      guard let message = try? JSONDecoder().decode(Messages.self, from: data) else { return }
+      print("Got message \(message)")
     }
   
     func availableServicesChanged(availableServiceIDs: [String]) {

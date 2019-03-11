@@ -50,9 +50,10 @@ class SecondServerViewController: UIViewController {
 extension SecondServerViewController: ConnectionResponder {
   func processMessage(_ data: Data, fromConnectionWithID connectionID: ConnectionID) {
         guard let message = try? JSONDecoder().decode(Messages.self, from: data) else { return }
-      
+    
+        server?.broadcastMessage(message)
+    
         switch message {
-        
         case .textMessage(let textMessage):
             let labelContent = NSMutableAttributedString(string: "\(textMessage.sender): \(textMessage.content)")
             

@@ -17,7 +17,7 @@ class Facade {
     
     private init() {
         self.client = ClientMessenger()
-        self.server = ServerMessenger(serviceIdentifier: "_tibei")
+        self.server = ServerMessenger(serviceIdentifier: "_yunglurk")
     }
     
     func startServer() {
